@@ -1,12 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>Getting Started with VR</title>
     <meta name="description" content="Getting Started with VR">
     <meta charset="utf-8">
     <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
-  </head>
-  <body>
-    <!-- We'll be adding content mostly here! -->
-  </body>
+    <script>
+        AFRAME.registerComponent('falling-box', {
+            init: function () {
+                this.el.setAttribute('position', {
+                    x: (Math.random() - 0.5) * 10,
+                    y: 5,
+                    z: (Math.random() - 0.5) * 10
+                });
+                this.el.setAttribute('rotation', {
+                    x: Math.random() * 360,
+                    y: Math.random() * 360,
+                    z: Math.random() * 360
+                });
+                this.el.setAttribute('animation__fall', {
+                    property: 'position',
+                    dur: 3000,
+                    easing: 'easeInOutQuad',
+                    to: {
+                        x: (Math.random() - 0.5) * 10,
+                        y: -2,
+                        z: (Math.random() - 0.5) * 10
+                    },
+                    loop: true,
+                    delay: Math.random() * 5000
+                });
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const scene = document.querySelector('a-scene');
+            for (let i = 0; i < 100; i++) {
+                const box = document.createElement('a-tetrahedron');
+                box.setAttribute('color', `#${Math.floor(Math.random() * 16777215).toString(16)}`);
+                box.setAttribute('scale', '0.5 0.5 0.5');
+                box.setAttribute('falling-box', '');
+                scene.appendChild(box);
+            }
+        });
+    </script>
+</head>
+<body>
+    <a-scene>
+        <a-assets>
+          <img id="skyTexture" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg">
+        </a-assets>
+        <a-sky src="#skyTexture"></a-sky>
+        <a-light type="point" intensity="7" position="-100 100 100" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000;"></a-light>
+    </a-scene>
+</body>
 </html>
